@@ -1,0 +1,37 @@
+// Design Code
+
+module or_gate (
+    input a,
+    input b,
+    output y
+);
+
+assign y = a | b;
+
+endmodule
+
+//Test bench code
+
+module or_gate_tb;
+
+reg a;
+reg b;
+wire y;
+
+// Instantiate the OR gate module
+or_gate uut (
+    .a(a),
+    .b(b),
+    .y(y)
+);
+
+initial begin
+    // Apply test inputs
+    a = 0; b = 0;
+    #10 a = 0; b = 1;
+    #10 a = 1; b = 0;
+    #10 a = 1; b = 1;
+    #10 $stop;
+end
+
+endmodule
