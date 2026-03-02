@@ -1,0 +1,60 @@
+// design code
+module mux(
+    input [3:0] I,
+    input [1:0] S,
+    output reg Y
+);
+always @(*) begin
+    case (S)
+        2'b00: Y = I[0];
+        2'b01: Y = I[1];
+        2'b10: Y = I[2];
+        2'b11: Y = I[3];
+        default: Y = 0;
+    endcase
+end
+endmodule
+
+//test bench code
+
+
+`timescale 1ns/1ps
+
+module mux_tb;
+reg [3:0] I;
+reg [1:0] S;
+wire Y;
+
+// DUT (Device Under Test)
+mux dut (
+    .I(I),
+    .S(S),
+    .Y(Y)
+);
+
+initial begin
+    // Monitor values
+    $monitor("Time=%0t | I=%b | S=%b | Y=%b", $time, I, S, Y);
+
+    // Test case 1
+    I = 4'b1010; S = 2'b00; #10;   // Y = I[0]
+
+    // Test case 2
+    I = 4'b1010; S = 2'b01; #10;   // Y = I[1]
+
+    // Test case 3
+    I = 4'b1010; S = 2'b10; #10;   // Y = I[2]
+
+    // Test case 4
+    I = 4'b1010; S = 2'b11; #10;   // Y = I[3]
+
+    // Change inputs
+    I = 4'b0111; S = 2'b00; #10;
+    I = 4'b0111; S = 2'b01; #10;
+    I = 4'b0111; S = 2'b10; #10;
+    I = 4'b0111; S = 2'b11; #10;
+
+    $finish;
+end
+
+endmodule
