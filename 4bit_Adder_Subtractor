@@ -1,0 +1,54 @@
+//design code
+module Add_Sub_4bit (
+    input [3:0] A,
+    input [3:0] B,
+    input M,              // Mode: 0 = Addition, 1 = Subtraction
+    output [3:0] Result,
+    output Carry_Borrow
+);
+
+wire [3:0] B_mod;
+wire [4:0] Sum;
+
+assign B_mod = B ^ {4{M}};      // XOR with mode (2's complement logic)
+assign Sum = A + B_mod + M;     // Add carry for subtraction
+
+assign Result = Sum[3:0];
+assign Carry_Borrow = Sum[4];
+
+endmodule
+
+//test bench code
+
+module Add_Sub_4bit_tb;
+
+reg [3:0] A;
+reg [3:0] B;
+reg M;
+wire [3:0] Result;
+wire Carry_Borrow;
+
+Add_Sub_4bit uut (
+    .A(A),
+    .B(B),
+    .M(M),
+    .Result(Result),
+    .Carry_Borrow(Carry_Borrow)
+);
+
+initial begin
+    $monitor("A=%b B=%b M=%b | Result=%b Carry/Borrow=%b", 
+              A, B, M, Result, Carry_Borrow);
+
+    // Addition
+    A = 4'b0101; B = 4'b0011; M = 0; #10;
+    A = 4'b0110; B = 4'b0001; M = 0; #10;
+
+    // Subtraction
+    A = 4'b0101; B = 4'b0011; M = 1; #10;
+    A = 4'b1000; B = 4'b0010; M = 1; #10;
+
+    $finish;
+end
+
+endmodule
