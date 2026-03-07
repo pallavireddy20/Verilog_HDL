@@ -1,0 +1,62 @@
+// design code
+module demux_1to4 (
+    input I,
+    input [1:0] Sel,
+    output reg Y0,
+    output reg Y1,
+    output reg Y2,
+    output reg Y3
+);
+
+always @(*) begin
+    Y0 = 0;
+    Y1 = 0;
+    Y2 = 0;
+    Y3 = 0;
+
+    case(Sel)
+        2'b00: Y0 = I;
+        2'b01: Y1 = I;
+        2'b10: Y2 = I;
+        2'b11: Y3 = I;
+    endcase
+end
+
+endmodule
+
+//test bench 
+module tb_demux_1to4;
+
+reg I;
+reg [1:0] Sel;
+wire Y0;
+wire Y1;
+wire Y2;
+wire Y3;
+
+demux_1to4 uut (
+    .I(I),
+    .Sel(Sel),
+    .Y0(Y0),
+    .Y1(Y1),
+    .Y2(Y2),
+    .Y3(Y3)
+);
+
+initial begin
+
+$monitor("I=%b Sel=%b | Y0=%b Y1=%b Y2=%b Y3=%b",
+          I, Sel, Y0, Y1, Y2, Y3);
+
+I = 1;
+
+Sel = 2'b00; #10;
+Sel = 2'b01; #10;
+Sel = 2'b10; #10;
+Sel = 2'b11; #10;
+
+$finish;
+
+end
+
+endmodule
